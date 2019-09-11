@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>AD Domain Check</displayName>
+<description>What domain is the computer bound to.</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/sh&#13;
+# JAMF PRO extension attribute&#13;
+# https://www.jamf.com/jamf-nation/discussions/24833/how-to-know-using-a-script-if-a-mac-is-actually-bound-to-ad&#13;
+# whp 2017 10 23&#13;
+#&#13;
+ADDomainCheck=$(dsconfigad -show | awk '/Active Directory Domain/{print $NF}')&#13;
+&#13;
+if [ "$ADDomainCheck" = "" ]; then&#13;
+        result="Not Bound to Active Directory"&#13;
+elif [ "$ADDomainCheck" != "" ]; then&#13;
+        result=$ADDomainCheck&#13;
+fi&#13;
+&#13;
+echo "&lt;result&gt;$result&lt;/result&gt;"</scriptContentsMac>
+</extensionAttribute>

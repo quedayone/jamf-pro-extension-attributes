@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>Adobe Creative Cloud Enterprise License</displayName>
+<description>https://www.jamf.com/jamf-nation/discussions/25698/extension-attribute-for-creative-cloud-enterprise-license</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/sh&#13;
+&#13;
+serial=$(awk '{if(/Serial/) print $7}' &lt; /Library/Application\ Support/Adobe/SLCache/TXVzZS0xLjAtTWFjLUdN.slc | cut -f2 -d"&gt;" | cut -f1 -d"&lt;")&#13;
+&#13;
+#If a number is returned, print the serial number. If not, the file is not found and will result with a "Not Installed" result&#13;
+if [[ $serial =~ [0-9] ]]; then&#13;
+    echo "&lt;result&gt;"$serial"&lt;/result&gt;"&#13;
+else&#13;
+    echo "&lt;result&gt;Not installed&lt;/result&gt;"&#13;
+fi</scriptContentsMac>
+</extensionAttribute>

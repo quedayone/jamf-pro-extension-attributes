@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>Dock Items</displayName>
+<description>Extention Attribute for items in the currently logged in uses dock</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/sh&#13;
+# Extention Attribute for items in the currently logged in uses dock&#13;
+#&#13;
+# get the current user&#13;
+loggedInUser=$(/usr/bin/python -c 'from SystemConfiguration import SCDynamicStoreCopyConsoleUser; import sys; username = (SCDynamicStoreCopyConsoleUser(None, None, None) or [None])[0]; username = [username,""][username in [u"loginwindow", None, u""]]; sys.stdout.write(username + "\n");')&#13;
+&#13;
+#Get all the items in the dock&#13;
+result=`dockutil --list --homeloc /Users/$loggedInUser | sed 's/file.*//'`&#13;
+echo "&lt;result&gt;$result&lt;/result&gt;"</scriptContentsMac>
+</extensionAttribute>

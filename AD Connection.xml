@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>AD Connection</displayName>
+<description>Is computer connected to the domain?</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/bash&#13;
+# https://www.jamf.com/jamf-nation/discussions/24833/how-to-know-using-a-script-if-a-mac-is-actually-bound-to-ad&#13;
+###### Do not edit below this line&#13;
+&#13;
+dscacheutil -flushcache&#13;
+&#13;
+sleep 5&#13;
+&#13;
+# Check if the computer is on the network by reading its own computer object from AD&#13;
+&#13;
+    # Get Domain from full structure, cut the name and remove space.&#13;
+    ShortDomainName=$(dscl /Active\ Directory/ -read . | grep SubNodes | sed 's|SubNodes: ||g')&#13;
+&#13;
+    computer=$(dsconfigad -show | grep "Computer Account" | awk '{ print $4 }')&#13;
+    dscl /Active\ Directory/$ShortDomainName/All\ Domains -read /Computers/$computer RecordName &amp;&gt;/dev/null&#13;
+&#13;
+    if [ ! $? == 0 ] ; then &#13;
+        echo "&lt;result&gt;No connection to the domain&lt;/result&gt;"&#13;
+        exit 1&#13;
+    else&#13;
+        echo "&lt;result&gt;Connected to $ShortDomainName&lt;/result&gt;"&#13;
+    fi&#13;
+&#13;
+&#13;
+exit 0</scriptContentsMac>
+</extensionAttribute>

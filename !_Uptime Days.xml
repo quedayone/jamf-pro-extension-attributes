@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>!_Uptime Days</displayName>
+<description>Computer Uptime. https://www.jamf.com/jamf-nation/discussions/27309/creating-a-smart-group-showing-macs-with-more-than-7-days-of-uptime</description>
+<dataType>number</dataType>
+<scriptContentsMac>#!/bin/sh&#13;
+&#13;
+dayCount=$( uptime | awk -F "(up | days)" '{ print $2 }' )&#13;
+&#13;
+if ! [ "$dayCount" -eq "$dayCount" ] 2&gt; /dev/null ; then&#13;
+    dayCount="0"&#13;
+fi&#13;
+&#13;
+echo "&lt;result&gt;$dayCount&lt;/result&gt;"&#13;
+&#13;
+exit 0</scriptContentsMac>
+</extensionAttribute>

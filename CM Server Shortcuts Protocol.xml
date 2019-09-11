@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>CM Server Shortcuts Protocol</displayName>
+<description>What protocol is being used to connect to the servers. &#13;
+We are assuming that all server connections are the same....</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/sh&#13;
+#&#13;
+## SERVER SHORT CUTS protocol &#13;
+#### Will Pierce&#13;
+#### 2016 07 20&#13;
+#&#13;
+# What protocol is being used to connect to the servers. &#13;
+# We are assuming that all server connections are the same....&#13;
+#&#13;
+# Is the Transfer shortcut installed?&#13;
+if [ -f	 /Users/Shared/Servers/Transfer.app/Contents/Resources/Scripts/main.scpt  ]; then&#13;
+	status=$(/usr/bin/osascript -e 'set Transfer to load script "/Users/Shared/Servers/Transfer.app/Contents/Resources/Scripts/main.scpt"' -e 'set transferProtocol to serverProtocol of Transfer')&#13;
+else&#13;
+	echo Transfer not found&#13;
+status="Shortcut not found"&#13;
+fi&#13;
+echo "&lt;result&gt;$status&lt;/result&gt;"&#13;
+&#13;
+exit 0</scriptContentsMac>
+</extensionAttribute>

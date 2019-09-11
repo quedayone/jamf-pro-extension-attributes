@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>CM Server Shortcuts Installed</displayName>
+<description>Is the folder /Users/Shared/Servers installed?</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/sh&#13;
+#&#13;
+## SERVER SHORT installed?&#13;
+#### Will Pierce&#13;
+#### 2019 02 05&#13;
+#&#13;
+# Is the Transfer shortcut installed?&#13;
+if [ -d /Users/Shared/Servers ]; then&#13;
+	status="Yes"&#13;
+else&#13;
+	# Servers folder not found&#13;
+	status="No"&#13;
+fi&#13;
+echo "&lt;result&gt;$status&lt;/result&gt;"&#13;
+&#13;
+exit 0</scriptContentsMac>
+</extensionAttribute>

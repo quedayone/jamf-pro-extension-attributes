@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>Location</displayName>
+<description>This attribute lists an approximate location of the machine based on it's current external IP address.  This attribute applies to both Mac and Windows.</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/sh&#13;
+myIP=`curl -L -s --max-time 10 http://checkip.dyndns.org | egrep -o -m 1 '([[:digit:]]{1,3}\.){3}[[:digit:]]{1,3}'`&#13;
+myLocationInfo=`curl -L -s --max-time 10 http://freegeoip.net/xml/$myIP`&#13;
+    &#13;
+myCountryCode=`echo $myLocationInfo|egrep -o '&lt;CountryCode&gt;.*&lt;/CountryCode&gt;'| sed -e 's/^.*&lt;CountryCode/&lt;CountryCode/' | cut -f2 -d'&gt;'| cut -f1 -d'&lt;'`&#13;
+myCity=`echo $myLocationInfo|egrep -o '&lt;City&gt;.*&lt;/City&gt;'| sed -e 's/^.*&lt;City/&lt;City/' | cut -f2 -d'&gt;'| cut -f1 -d'&lt;'`&#13;
+myRegionName=`echo $myLocationInfo|egrep -o '&lt;RegionName&gt;.*&lt;/RegionName&gt;'| sed -e 's/^.*&lt;RegionName/&lt;RegionName/' | cut -f2 -d'&gt;'| cut -f1 -d'&lt;'`&#13;
+        &#13;
+echo "&lt;result&gt;$myCity, $myRegionName - $myCountryCode&lt;/result&gt;"</scriptContentsMac>
+</extensionAttribute>

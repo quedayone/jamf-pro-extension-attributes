@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>MSFT Outlook REST Calendar Sync</displayName>
+<description/>
+<dataType>string</dataType>
+<scriptContentsMac>&#13;
+#!/usr/bin/python&#13;
+&#13;
+import glob&#13;
+import HTMLParser&#13;
+import os&#13;
+import re&#13;
+import sys&#13;
+from os.path import expanduser&#13;
+from SystemConfiguration import SCDynamicStoreCopyConsoleUser&#13;
+&#13;
+def get_console_user():&#13;
+    username = (SCDynamicStoreCopyConsoleUser(None, None, None) or [None])[0]&#13;
+    username = [username,""][username in [u"loginwindow", None, u""]]&#13;
+    return username&#13;
+&#13;
+def does_folder_exist(path):&#13;
+    return os.path.isdir(path)&#13;
+&#13;
+def get_home_folder(username):&#13;
+    home_folder = expanduser('~' + str(username))&#13;
+    if does_folder_exist(home_folder):&#13;
+        return home_folder&#13;
+    return None&#13;
+&#13;
+def get_outlook_log_filename(home_folder):&#13;
+    log_folder = os.path.join(home_folder, 'Library/Containers/com.microsoft.Outlook/Data/Library/Caches/Microsoft/uls/com.microsoft.Outlook/logs')&#13;
+    if does_folder_exist(log_folder):&#13;
+        log_files = glob.glob(log_folder + '/*.log')&#13;
+        if len(log_files) != 0:&#13;
+            return str(log_files[0])&#13;
+    return None&#13;
+&#13;
+def grep_outlook_log(filename):&#13;
+    with open(filename) as log_file:&#13;
+        for line in log_file:&#13;
+            line = re.findall(r'"IsSetupForRESTCalendarSync": true', line)&#13;
+            if line:&#13;
+                return 'True'&#13;
+    return 'False'&#13;
+&#13;
+## MAIN&#13;
+console_user = get_console_user()&#13;
+rest_enabled = 'Unknown'&#13;
+if console_user:&#13;
+    home_folder = get_home_folder(console_user)&#13;
+    if home_folder:&#13;
+        outlook_log = get_outlook_log_filename(home_folder)&#13;
+        if outlook_log:&#13;
+            rest_enabled = grep_outlook_log(outlook_log)&#13;
+&#13;
+html_parser = HTMLParser.HTMLParser()&#13;
+result = html_parser.unescape('&lt;result&gt;') + str(rest_enabled) + html_parser.unescape('&lt;/result&gt;')&#13;
+print(result)&#13;
+&#13;
+sys.exit(0)&#13;
+</scriptContentsMac>
+</extensionAttribute>

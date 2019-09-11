@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>CM Dock Set</displayName>
+<description>Is the base CM dock set? Checks for User/Library/Preference/com.cm.provision CM-defaultDockSet  </description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/sh&#13;
+# Extension Attribute For CM Dock&#13;
+user=`python -c 'from SystemConfiguration import SCDynamicStoreCopyConsoleUser; import sys; username = (SCDynamicStoreCopyConsoleUser(None, None, None) or [None])[0]; username = [username,""][username in [u"loginwindow", None, u""]]; sys.stdout.write(username + "\n");'`&#13;
+#&#13;
+version=$(defaults read /Users/$user/Library/Preferences/com.cm.provision.plist CM-defaultDockSet)&#13;
+if [[ $version == *"1"* ]]; then&#13;
+	# Dock is set&#13;
+    echo "&lt;result&gt;Yes&lt;/result&gt;"&#13;
+else&#13;
+	# Dock has not been set&#13;
+    echo "&lt;result&gt;No&lt;/result&gt;"&#13;
+fi&#13;
+</scriptContentsMac>
+</extensionAttribute>

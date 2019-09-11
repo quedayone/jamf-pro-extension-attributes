@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>Users Folder Sizes</displayName>
+<description>Gets the folder sizes of some of the folders in there home folder.&#13;
+Desktop, Pictures, Music.</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/bash&#13;
+user=`ls -l /dev/console | cut -d " " -f 4`&#13;
+cd /Users/$user/&#13;
+x="du -sh Music Pictures Documents Desktop"&#13;
+y=`eval $x`&#13;
+echo "&lt;result&gt;$y&lt;/result&gt;"</scriptContentsMac>
+</extensionAttribute>

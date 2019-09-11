@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>Last User</displayName>
+<description>This attribute displays the last user to log in.  This attribute applies to both Mac and Windows.</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/sh&#13;
+lastUser=`defaults read /Library/Preferences/com.apple.loginwindow lastUserName`&#13;
+&#13;
+if [ $lastUser == "" ]; then&#13;
+	echo "&lt;result&gt;No logins&lt;/result&gt;"&#13;
+else&#13;
+	echo "&lt;result&gt;$lastUser&lt;/result&gt;"&#13;
+fi</scriptContentsMac>
+</extensionAttribute>

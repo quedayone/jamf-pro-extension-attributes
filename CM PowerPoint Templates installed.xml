@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>CM PowerPoint Templates installed</displayName>
+<description/>
+<dataType>string</dataType>
+<scriptContentsMac>#!/usr/bin/python&#13;
+# Problem:&#13;
+# Need to find all installed Colle McVoy PowerPoint Templates&#13;
+# Will Pierce&#13;
+# 2018 04 18&#13;
+import os, sys&#13;
+#&#13;
+# Where should we check for Templates&#13;
+path = "/Library/Application Support/Microsoft/Office365/User Content.localized/Templates.localized/"&#13;
+#&#13;
+# Need to check that the folder is there&#13;
+try:&#13;
+    os.path.isdir&#13;
+except:&#13;
+    print "&lt;result&gt;"&#13;
+    print "/Library/Application Support/Microsoft/Office365/User Content.localized/Templates.localized/ Not found"&#13;
+    print "&lt;/result&gt;"&#13;
+    exit()&#13;
+#&#13;
+print "&lt;result&gt;"&#13;
+dirs = os.listdir( path )&#13;
+for file in dirs:&#13;
+    if file.endswith(".potx"):&#13;
+        print file&#13;
+print "&lt;/result&gt;"</scriptContentsMac>
+</extensionAttribute>

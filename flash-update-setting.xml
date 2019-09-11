@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>flash-update-setting</displayName>
+<description>check for the state of Adobe Flash Update Settings</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/sh&#13;
+&#13;
+# Extension Attribute to check for the state of Adobe Flash Update Settings&#13;
+# &#13;
+# by Dan K. Snelson 6-Nov-2014, 22-Apr-2016&#13;
+# &#13;
+# Inspired by: https://jamfnation.jamfsoftware.com/discussion.html?id=10340&#13;
+# and by: https://jamfnation.jamfsoftware.com/discussion.html?id=10340#responseChild113904&#13;
+&#13;
+&#13;
+&#13;
+testDirectory="/Library/Internet Plug-Ins/Flash Player.plugin" # Flash Player plug-in&#13;
+if [ -d "${testDirectory}" ]; then&#13;
+    # Flash Player.plugin exists; check its setting&#13;
+    testFile="/Library/Application Support/Macromedia/mms.cfg" # Preference&#13;
+    if [ -f "${testFile}" ] ; then&#13;
+        # Read preference settings &#13;
+        AutoUpdateDisable=$( /usr/bin/grep 'AutoUpdateDisable' /Library/Application\ Support/Macromedia/mms.cfg | /usr/bin/awk -F= '{ print $2 }' )&#13;
+        SilentAutoUpdateEnable=$( /usr/bin/grep 'SilentAutoUpdateEnable' /Library/Application\ Support/Macromedia/mms.cfg | /usr/bin/awk -F= '{ print $2 }' )&#13;
+&#13;
+        case ${AutoUpdateDisable}:${SilentAutoUpdateEnable} in&#13;
+            1:0)    result="Never" ;;         # AutoUpdateDisable=1 and SilentAutoUpdateEnable=0&#13;
+            0:0)    result="Notify" ;;        # AutoUpdateDisable=0 and SilentAutoUpdateEnable=0&#13;
+            0:1)    result="Allow" ;;     # AutoUpdateDisable=0 and SilentAutoUpdateEnable=1&#13;
+        esac&#13;
+    else&#13;
+        result="Notify (default)"&#13;
+    fi&#13;
+else&#13;
+    result="Not installed"&#13;
+fi&#13;
+&#13;
+echo "&lt;result&gt;${result}&lt;/result&gt;"</scriptContentsMac>
+</extensionAttribute>

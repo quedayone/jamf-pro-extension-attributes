@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>MSFT Office 365 Active Logons</displayName>
+<description/>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/sh&#13;
+&#13;
+# Functions&#13;
+function DetectO365Logon {&#13;
+	# creates a list of local usernames with UIDs above 500 (not hidden)&#13;
+	userList=$( /usr/bin/dscl /Local/Default -list /Users uid | /usr/bin/awk '$2 &gt;= 501 { print $1 }' )&#13;
+	&#13;
+	while IFS= read aUser&#13;
+	do&#13;
+		# get the user's home folder path&#13;
+		HOMEPATH=$( eval /bin/echo ~$aUser )&#13;
+&#13;
+		# execute some sql to get the active O365 logon, if any&#13;
+		local RESULT=$(/usr/bin/sqlite3 "$HOMEPATH/Library/Group Containers/UBF8T346G9.Office/MicrosoftRegistrationDB.reg" "SELECT value from HKEY_CURRENT_USER_values WHERE name='UserDisplayName' LIMIT 1;")&#13;
+	&#13;
+		# checks to see if we got a hit&#13;
+		if [ "$RESULT" != "" ]; then&#13;
+			logons+="$RESULT;"&#13;
+		fi&#13;
+	done &lt;&lt;&lt; "$userList"&#13;
+	&#13;
+	/bin/echo "$logons"&#13;
+}&#13;
+&#13;
+## Main&#13;
+O365LOGONS=$(DetectO365Logon)&#13;
+if [ "$O365LOGONS" != "" ]; then&#13;
+	/bin/echo "&lt;result&gt;$O365LOGONS&lt;/result&gt;"&#13;
+else&#13;
+	/bin/echo "&lt;result&gt;None detected&lt;/result&gt;"&#13;
+fi&#13;
+&#13;
+exit 0</scriptContentsMac>
+</extensionAttribute>

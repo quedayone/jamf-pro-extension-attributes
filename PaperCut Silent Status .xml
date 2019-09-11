@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>PaperCut Silent Status </displayName>
+<description>What is paper cut set to for its silent status</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/sh&#13;
+# read File a single line from a text file&#13;
+readFile="/Applications/PCClient.app/Contents/Resources/config.properties"&#13;
+lineNumber="23"&#13;
+if [ -e $readFile ]; then&#13;
+    result=`cat "$readFile" | sed -n "$lineNumber p"`&#13;
+    echo "&lt;result&gt;"&#13;
+    echo $result&#13;
+    echo "&lt;/result&gt;"&#13;
+else&#13;
+    echo "&lt;result&gt;Config not found/result&gt;"&#13;
+fi</scriptContentsMac>
+</extensionAttribute>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>Printers Installed</displayName>
+<description/>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/sh&#13;
+# https://jamfnation.jamfsoftware.com/discussion.html?id=20465&#13;
+RESULT=`lpstat -p | awk '{print $2}' | sed '/^$/d'`&#13;
+EMPTY="lpstat: No destinations added."&#13;
+&#13;
+if [[ "${RESULT}" != "$EMPTY" ]]; then&#13;
+    echo "&lt;result&gt;$RESULT&lt;/result&gt;"&#13;
+else&#13;
+    echo "&lt;result&gt;NoPrintersInstalled&lt;/result&gt;"&#13;
+fi</scriptContentsMac>
+</extensionAttribute>

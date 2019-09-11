@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>ScreenSaver</displayName>
+<description>What screen saver is set?</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/sh&#13;
+####################################################################################################&#13;
+# Parts taken from:&#13;
+# More information: http://macmule.com/2010/11/18/how-to-set-osxs-screen-saver-via-script/&#13;
+#&#13;
+# GitRepo: https://github.com/macmule/setscreensaver&#13;
+#&#13;
+# License: http://macmule.com/license/&#13;
+#&#13;
+####################################################################################################&#13;
+# Get the Universally Unique Identifier (UUID) for the correct platform&#13;
+# ioreg commands found in a comment at http://www.afp548.com/article.php?story=leopard_byhost_changes&#13;
+#&#13;
+###########&#13;
+# Check if hardware is PPC or early Intel&#13;
+if [[ `ioreg -rd1 -c IOPlatformExpertDevice | grep -i "UUID" | cut -c27-50` == "00000000-0000-1000-8000-" ]]; then&#13;
+macUUID=`ioreg -rd1 -c IOPlatformExpertDevice | grep -i "UUID" | cut -c51-62 | awk {'print tolower()'}`&#13;
+# Check if hardware is new Intel&#13;
+elif [[ `ioreg -rd1 -c IOPlatformExpertDevice | grep -i "UUID" | cut -c27-50` != "00000000-0000-1000-8000-" ]]; then&#13;
+macUUID=`ioreg -rd1 -c IOPlatformExpertDevice | grep -i "UUID" | cut -c27-62`&#13;
+fi&#13;
+###########&#13;
+# Get the Username of the currently logged user&#13;
+loggedInUser=`/bin/ls -l /dev/console | /usr/bin/awk '{ print $3 }'`&#13;
+&#13;
+# Query dscl to get the currently logged in users home folder&#13;
+##### loggedInUserHome=`dscl . -read /Users/$loggedInUser | grep NFSHomeDirectory: | /usr/bin/awk '{print $2}'`&#13;
+#loggedInUserHome=`dscl . -read /Users/$loggedInUser | grep NFSHomeDirectory: | /usr/bin/awk '{print $2}'`&#13;
+# Get the screensaver&#13;
+result=`/usr/libexec/PlistBuddy -c "print :moduleDict:moduleName" "/Users/$loggedInUser"/Library/Preferences/ByHost/com.apple.screensaver."$macUUID".plist`&#13;
+echo "&lt;result&gt;$result&lt;/result&gt;"&#13;
+exit 0 </scriptContentsMac>
+</extensionAttribute>

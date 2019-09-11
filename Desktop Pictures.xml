@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>Desktop Pictures</displayName>
+<description>Extension Attribute for desktop pictures</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/sh&#13;
+# Extension Attribute for desktop pictures&#13;
+#&#13;
+# get the current user&#13;
+user=$(/usr/bin/python -c 'from SystemConfiguration import SCDynamicStoreCopyConsoleUser; import sys; username = (SCDynamicStoreCopyConsoleUser(None, None, None) or [None])[0]; username = [username,""][username in [u"loginwindow", None, u""]]; sys.stdout.write(username + "\n");')&#13;
+&#13;
+#Get all the desktop pictures&#13;
+result=`su - $user -c "desktoppr"`&#13;
+echo "&lt;result&gt;$result&lt;/result&gt;"</scriptContentsMac>
+</extensionAttribute>

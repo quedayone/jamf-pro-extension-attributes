@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>ScreenSaver Idletime Min</displayName>
+<description>What is the Screen Saver idle time set to in minutes?&#13;
+If it is not 15 min set it to be.</description>
+<dataType>number</dataType>
+<scriptContentsMac>#!/bin/bash&#13;
+&#13;
+### Extension Attribute Template to check the screen saver idle time &#13;
+### And set it to 1200 if it is not.#### Will Pierce&#13;
+#### December 15, 2014&#13;
+&#13;
+## Get the currently logged in user&#13;
+user=`python -c 'from SystemConfiguration import SCDynamicStoreCopyConsoleUser; import sys; username = (SCDynamicStoreCopyConsoleUser(None, None, None) or [None])[0]; username = [username,""][username in [u"loginwindow", None, u""]]; sys.stdout.write(username + "\n");'`&#13;
+## echo $user&#13;
+&#13;
+## enter the preference you want to check and set&#13;
+pref=`sudo -u $user defaults -currentHost read com.apple.screensaver idleTime`&#13;
+&#13;
+## enter the correct result&#13;
+setting=900&#13;
+&#13;
+### don't change below eh!&#13;
+&#13;
+if [[ $pref == $setting ]]&#13;
+	then&#13;
+let "result= ($pref / 60 )"&#13;
+	else&#13;
+## result is not correct set it do be correct&#13;
+sudo -u $user defaults -currentHost write com.apple.screensaver idleTime -int "$setting"&#13;
+	fi&#13;
+## grab the new correct setting&#13;
+pref=`sudo -u $user defaults -currentHost read com.apple.screensaver idleTime`&#13;
+&#13;
+## in this case the actual minutes is more helpful, so convert to min&#13;
+let "result= ($pref / 60 )"&#13;
+&#13;
+echo "&lt;result&gt;$result&lt;/result&gt;"&#13;
+&#13;
+exit 0</scriptContentsMac>
+</extensionAttribute>

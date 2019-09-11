@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>User Picture</displayName>
+<description>Report the current logged in users picture. </description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/bash&#13;
+####################################################################################################&#13;
+#&#13;
+# ABOUT THIS Extension Attribute&#13;
+# NAME&#13;
+#	user-picture-report.sh&#13;
+#&#13;
+# DESCRIPTION&#13;
+# dscl read of the current loged in user picture&#13;
+#	&#13;
+# Data Type: String&#13;
+# Inventory Display: Extension Attributes&#13;
+####################################################################################################&#13;
+#&#13;
+# HISTORY&#13;
+#&#13;
+#	Version: 1.0&#13;
+#&#13;
+#	- Created by Will Pierce on 150622&#13;
+#	- Version 1.0&#13;
+#	-	20170511&#13;
+#&#13;
+####################################################################################################&#13;
+#&#13;
+###Get the currently logged in user, in a more Apple approved way&#13;
+user=`python -c 'from SystemConfiguration import SCDynamicStoreCopyConsoleUser; import sys; username = (SCDynamicStoreCopyConsoleUser(None, None, None) or [None])[0]; username = [username,""][username in [u"loginwindow", None, u""]]; sys.stdout.write(username + "\n");'`&#13;
+#&#13;
+# This will read what the users picture is currently set to&#13;
+result=`dscl . -read /Users/$user Picture | tail -1 | sed 's/^[ \t]*//'`&#13;
+# If not set by dscl result will be "No such key: Picture"&#13;
+#&#13;
+echo "&lt;result&gt;$result&lt;/result&gt;"&#13;
+#&#13;
+exit 0</scriptContentsMac>
+</extensionAttribute>

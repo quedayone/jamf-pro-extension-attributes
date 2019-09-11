@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>JSS Certificate Validation</displayName>
+<description>This attribute verifies that the client can verify the certificate installed on the JSS.  This attribute should be used prior to checking the preference "This JSS has a valid certificate installed" in the "JSS/URL Certificate" section of the Management Framework Settings.</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/sh&#13;
+if [ -f "/Library/Preferences/com.jamfsoftware.jamf.plist" ]; then&#13;
+validurl=`defaults read /Library/Preferences/com.jamfsoftware.jamf jss_url | grep https://`&#13;
+	if [[ $validurl = "" ]]; then&#13;
+		echo "&lt;result&gt;Failed - URL did not contain HTTPS&lt;/result&gt;"&#13;
+	else&#13;
+		curlresult=`curl $validurl`&#13;
+			if [[ $curlresult = "" ]]; then&#13;
+				echo "&lt;result&gt;Failed - curl was unable to connect&lt;/result&gt;"&#13;
+			else&#13;
+				echo "&lt;result&gt;Success&lt;/result&gt;"&#13;
+			fi&#13;
+	fi&#13;
+else&#13;
+echo "&lt;result&gt;Failed - No jamf 7.3 conf file found&lt;/result&gt;"&#13;
+fi&#13;
+	</scriptContentsMac>
+</extensionAttribute>

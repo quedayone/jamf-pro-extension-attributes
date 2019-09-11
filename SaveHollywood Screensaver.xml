@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>SaveHollywood Screensaver</displayName>
+<description>Check to see if SaveHollywood.saver is installed</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/bash&#13;
+#####################################################################################################&#13;
+#&#13;
+# ABOUT THIS PROGRAM&#13;
+# extension attribute&#13;
+# SaveHollywood.saver installed Yes No&#13;
+#&#13;
+####################################################################################################&#13;
+#&#13;
+# HISTORY&#13;
+#&#13;
+#	Version: 1.0&#13;
+#	- Will Pierce 2019 05 02&#13;
+#&#13;
+####################################################################################################&#13;
+#&#13;
+# Check to see if SaveHollywood.saver exists&#13;
+if [ -e /Library/Screen\ Savers/SaveHollywood.saver ]; then &#13;
+	result="Yes"&#13;
+else&#13;
+	result="No"&#13;
+fi&#13;
+#&#13;
+echo "&lt;result&gt;$result&lt;/result&gt;"&#13;
+exit 0</scriptContentsMac>
+</extensionAttribute>

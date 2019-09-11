@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>Gatekeeper Status</displayName>
+<description>This will display the current status of Gatekeeper (visible under System Preferences &gt; Security &amp; Privacy &gt; General).</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/sh&#13;
+&#13;
+TESTFILE="usr/local/bin/jamf/"&#13;
+&#13;
+CMD="`spctl -v -a $TESTFILE 2&gt;&amp;1`"&#13;
+&#13;
+case "$CMD" in&#13;
+	*rejected*)&#13;
+		STATUS="Mac App Store"&#13;
+	;;	&#13;
+	*override=security*)&#13;
+		STATUS="Anywhere"&#13;
+	;;&#13;
+	*)&#13;
+		STATUS="Mac App Store and identified developers"	&#13;
+	;;&#13;
+esac&#13;
+&#13;
+echo "&lt;result&gt;$STATUS&lt;/result&gt;"</scriptContentsMac>
+</extensionAttribute>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>LastReboot</displayName>
+<description>https://jamfnation.jamfsoftware.com/discussion.html?id=10009&#13;
+This one will output it in a date format that can be used in a "Date format" Extension Attribute the way Casper expects it to be. So you could use a search like "Before" or "After" a certain date, or something like "In the last X days" and it should work.</description>
+<dataType>date</dataType>
+<scriptContentsMac>#!/bin/bash&#13;
+### Removed the time&#13;
+### echo "&lt;result&gt;$(date -jf "%s" "$(sysctl kern.boottime | awk -F'[= |,]' '{print $6}')" +"%Y-%m-%d %T")&lt;/result&gt;"&#13;
+echo "&lt;result&gt;$(date -jf "%s" "$(sysctl kern.boottime | awk -F'[= |,]' '{print $6}')" +"%Y-%m-%d")&lt;/result&gt;"&#13;
+</scriptContentsMac>
+</extensionAttribute>

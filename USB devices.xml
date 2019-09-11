@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>USB devices</displayName>
+<description>List USB devices</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/sh&#13;
+# http://apple.stackexchange.com/questions/170105/list-usb-devices-on-osx-command-line&#13;
+# WHP 20160801&#13;
+USBdevices=`ioreg -p IOUSB -w0 | sed 's/[^o]*o //; s/@.*$//' | grep -v '^Root.*'`&#13;
+&#13;
+echo "&lt;result&gt;$USBdevices&lt;/result&gt;"</scriptContentsMac>
+</extensionAttribute>

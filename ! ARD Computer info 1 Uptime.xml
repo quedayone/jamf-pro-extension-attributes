@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>! ARD Computer info 1 Uptime</displayName>
+<description/>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/bash&#13;
+# Commands required by this script&#13;
+declare -x awk="/usr/bin/awk"&#13;
+declare -x sysctl="/usr/sbin/sysctl"&#13;
+declare -x perl="/usr/bin/perl"&#13;
+&#13;
+declare -xi DAY=86400&#13;
+declare -xi EPOCH="$($perl -e "print time")"&#13;
+declare -xi UPTIME="$($sysctl kern.boottime |&#13;
+                        $awk -F'[= ,]' '/sec/{print $6;exit}')"&#13;
+&#13;
+declare -xi DIFF="$(($EPOCH - $UPTIME))"&#13;
+&#13;
+if [ $DIFF -le $DAY ] ; then&#13;
+        echo "&lt;result&gt;1&lt;/result&gt;"&#13;
+        ## Also set ARD computer info 1 to uptime&#13;
+        /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -configure -computerinfo -set1 -1 "Uptime 1 day"&#13;
+else&#13;
+        echo "&lt;result&gt;$(($DIFF / $DAY))&lt;/result&gt;"&#13;
+        ## Also set ARD computer info 1 to uptime&#13;
+        /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -configure -computerinfo -set1 -1 "Uptime $(($DIFF / $DAY)) Days"&#13;
+fi</scriptContentsMac>
+</extensionAttribute>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>MSFT Office DeviceID</displayName>
+<description/>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/sh&#13;
+&#13;
+# Functions&#13;
+function GetDeviceID {&#13;
+	# creates a list of local usernames with UIDs above 500 (not hidden)&#13;
+	userList=$( /usr/bin/dscl /Local/Default -list /Users uid | /usr/bin/awk '$2 &gt;= 501 { print $1 }' )&#13;
+	&#13;
+	while IFS= read aUser&#13;
+	do&#13;
+		# get the user's home folder path&#13;
+		HOMEPATH=$( eval /bin/echo ~$aUser )&#13;
+&#13;
+		# grab the device id from the Office365ServiceV2 log&#13;
+		local RESULT=$(/usr/bin/grep -m1 'iaaaa' $HOMEPATH/Library/Containers/com.microsoft.Office365ServiceV2/Data/Library/Caches/Microsoft/uls/com.microsoft.Office365ServiceV2/logs/*.log | cut -f8)&#13;
+	&#13;
+		# checks to see if we got a hit&#13;
+		if [ "$RESULT" != "" ]; then&#13;
+			ID="$RESULT"&#13;
+		fi&#13;
+	done &lt;&lt;&lt; "$userList"&#13;
+	&#13;
+	/bin/echo "$ID"&#13;
+}&#13;
+&#13;
+## Main&#13;
+DEVICEID=$(GetDeviceID)&#13;
+if [ "$DEVICEID" != "" ]; then&#13;
+	/bin/echo "&lt;result&gt;$DEVICEID&lt;/result&gt;"&#13;
+else&#13;
+	/bin/echo "&lt;result&gt;Not detected&lt;/result&gt;"&#13;
+fi&#13;
+&#13;
+exit 0</scriptContentsMac>
+</extensionAttribute>

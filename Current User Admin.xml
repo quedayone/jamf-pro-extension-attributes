@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>Current User Admin</displayName>
+<description>Checks to see if the current user is an admin.</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/sh&#13;
+&#13;
+currUser=$( /usr/bin/who | /usr/bin/awk '/console/{ print $1 }' )&#13;
+&#13;
+Groups=$( dseditgroup -o checkmember -m $currUser admin )&#13;
+&#13;
+echo "&lt;result&gt;$Groups&lt;/result&gt;"</scriptContentsMac>
+</extensionAttribute>

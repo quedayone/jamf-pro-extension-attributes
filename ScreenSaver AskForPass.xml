@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>ScreenSaver AskForPass</displayName>
+<description>Will the Screen Saver ask the user for a password?</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/sh&#13;
+&#13;
+# Get the Username of the currently logged user&#13;
+loggedInUser=`/bin/ls -l /dev/console | /usr/bin/awk '{ print $3 }'`&#13;
+&#13;
+## Read the askForPassword key set it as var&#13;
+askForPassword=`defaults read /Library/Managed\ Preferences/$loggedInUser/com.apple.screensaver.plist askForPassword`&#13;
+&#13;
+if [ "$askForPassword" == "1" ]; then&#13;
+	result="Yes"&#13;
+else&#13;
+if [ "$askForPassword" == "0" ]; then&#13;
+	result="No"&#13;
+else&#13;
+if [ "$askForPassword" == "" ]; then&#13;
+	result="Domain or Key Not Found"&#13;
+fi&#13;
+fi&#13;
+fi&#13;
+echo "&lt;result&gt;$result&lt;/result&gt;"</scriptContentsMac>
+</extensionAttribute>

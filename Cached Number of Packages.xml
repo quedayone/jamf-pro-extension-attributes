@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>Cached Number of Packages</displayName>
+<description> Extension Attribute that returned the number of packages that are living in the Waiting Room directory.</description>
+<dataType>number</dataType>
+<scriptContentsMac>#!/bin/sh&#13;
+&#13;
+Found=$( find /Library/Application\ Support/JAMF/Waiting\ Room/ -maxdepth 1 -name *.mpkg -or -name *.pkg -or -name *.dmg | wc -l | sed 's/^[ \t]*//' )&#13;
+&#13;
+echo "&lt;result&gt;$Found&lt;/result&gt;"</scriptContentsMac>
+</extensionAttribute>

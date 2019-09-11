@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>Xprotect Status</displayName>
+<description>EA to pull the modification date from Xprotect so that admins can see what version of Xprotect is in use on client machines. &#13;
+&#13;
+n.b. As Apple silently pushes Xprotect updates to clients if the service is enabled on the machine, the data this EA collects is a snapshot of Xprotect status at time of inventory and might not be the current status on a client machine.</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/bash&#13;
+&#13;
+osvers_major=$(sw_vers -productVersion | awk -F. '{print $1}')&#13;
+osvers_minor=$(sw_vers -productVersion | awk -F. '{print $2}')&#13;
+&#13;
+if [[ ${osvers_major} -eq 10 ]] &amp;&amp; [[ ${osvers_minor} -lt 6 ]]; then&#13;
+&#13;
+result="XProtect not available for `sw_vers -productVersion`"&#13;
+&#13;
+  echo "&lt;result&gt;$result&lt;/result&gt;" &#13;
+&#13;
+fi&#13;
+&#13;
+if [[ ${osvers_major} -eq 10 ]] &amp;&amp; [[ ${osvers_minor} -ge 6 ]] &amp;&amp; [[ ${osvers_minor} -lt 9 ]]; then&#13;
+&#13;
+last_xprotect_update_epoch_time=`date -jf "%s" $(stat -s /System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/XProtect.meta.plist | tr ' ' '\n' | awk -F= '/st_mtime/{print $NF}') +%s`&#13;
+last_xprotect_update_human_readable_time=`date -r "$last_xprotect_update_epoch_time" '+%m/%d/%Y %H:%M:%S'`&#13;
+result="$last_xprotect_update_human_readable_time"&#13;
+&#13;
+  echo "&lt;result&gt;$result&lt;/result&gt;" &#13;
+&#13;
+fi&#13;
+&#13;
+if [[ ${osvers_major} -eq 10 ]] &amp;&amp; [[ ${osvers_minor} -ge 9 ]]; then&#13;
+&#13;
+  last_xprotect_update_epoch_time=$(printf "%s\n" `for i in $(pkgutil --pkgs=".*XProtect.*"); do pkgutil --pkg-info $i | awk '/install-time/ {print $2}'; done` | sort -n | tail -1)&#13;
+  last_xprotect_update_human_readable_time=`/bin/date -r "$last_xprotect_update_epoch_time" '+%m/%d/%Y %H:%M:%S'`&#13;
+  result="$last_xprotect_update_human_readable_time"&#13;
+&#13;
+  echo "&lt;result&gt;$result&lt;/result&gt;"&#13;
+&#13;
+fi</scriptContentsMac>
+</extensionAttribute>

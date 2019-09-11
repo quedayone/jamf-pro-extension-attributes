@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
+<displayName>Colle McVoy Screen Saver Installed</displayName>
+<description>Is the Colle McVoy Screen Saver installed?</description>
+<dataType>string</dataType>
+<scriptContentsMac>#!/bin/bash&#13;
+#####################################################################################################&#13;
+#&#13;
+# ABOUT THIS PROGRAM&#13;
+# extension attribute&#13;
+# Is the C+M Screen Saver installed?&#13;
+#&#13;
+####################################################################################################&#13;
+#&#13;
+# HISTORY&#13;
+#&#13;
+#	Version: 1.0&#13;
+#	- Will Pierce 151103&#13;
+#&#13;
+####################################################################################################&#13;
+#&#13;
+&#13;
+# Check to see if /Library/Screen\ Savers/C+MDefault.saver exists&#13;
+if [ -d /Library/Screen\ Savers/colle\ mcvoy.saver ]; then &#13;
+	result="Yes"&#13;
+else&#13;
+	result="No"&#13;
+fi&#13;
+#&#13;
+echo "&lt;result&gt;$result&lt;/result&gt;"&#13;
+exit 0</scriptContentsMac>
+</extensionAttribute>
