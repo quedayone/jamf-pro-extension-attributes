@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
-<displayName>CM Server Shortcuts Protocol</displayName>
+<displayName>XX Server Shortcuts Protocol</displayName>
 <description>What protocol is being used to connect to the servers. &#13;
 We are assuming that all server connections are the same....</description>
 <dataType>string</dataType>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?><extensionAttribute>
-<displayName>CM PowerPoint Templates installed</displayName>
+<displayName>XX PowerPoint Templates installed</displayName>
 <description/>
 <dataType>string</dataType>
 <scriptContentsMac>#!/usr/bin/python&#13;
 # Problem:&#13;
-# Need to find all installed Colle McVoy PowerPoint Templates&#13;
+# Need to find all installed XX XX PowerPoint Templates&#13;
 # Will Pierce&#13;
 # 2018 04 18&#13;
 import os, sys&#13;
